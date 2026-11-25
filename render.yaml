@@ -1,7 +1,7 @@
 version: "1"
 services:
   - type: web
-    name: library-management-api
+    name: studydock-api
     runtime: node
     rootDir: server
     plan: free
@@ -13,6 +13,8 @@ services:
         value: production
       - key: TZ
         value: Asia/Kolkata
+      - key: ENABLE_DEMO_RESET
+        value: "false"
       - key: CLIENT_URL
         sync: false
       - key: SUPABASE_URL

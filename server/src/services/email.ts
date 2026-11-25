@@ -5,6 +5,19 @@ import { buildGoogleCalendarUrl } from './validation.js';
 
 let transporter: Transporter | null = null;
 
+export interface LastEmailStatus {
+  provider: string;
+  sent: boolean;
+  error?: string;
+  at: string;
+}
+
+let lastEmailStatus: LastEmailStatus | null = null;
+
+export function getLastEmailStatus(): LastEmailStatus | null {
+  return lastEmailStatus;
+}
+
 function getTransporter(): Transporter | null {
   if (!env.gmailUser.trim() || !env.gmailAppPassword.trim()) return null;
   if (!transporter) {
@@ -113,8 +126,11 @@ async function dispatchEmail(params: {
       if (!res.ok) {
         const errBody = await res.text();
         console.error(`[email:brevo] HTTP ${res.status}:`, errBody);
-        return { sent: false, error: `Brevo HTTP ${res.status}: ${errBody}` };
+        const error = `Brevo HTTP ${res.status}: ${errBody.slice(0, 200)}`;
+        lastEmailStatus = { provider, sent: false, error, at: new Date().toISOString() };
+        return { sent: false, error };
       }
+      lastEmailStatus = { provider, sent: true, at: new Date().toISOString() };
       return { sent: true };
     }
 
@@ -150,8 +166,11 @@ async function dispatchEmail(params: {
       if (!res.ok) {
         const errBody = await res.text();
         console.error(`[email:resend] HTTP ${res.status}:`, errBody);
-        return { sent: false, error: `Resend HTTP ${res.status}: ${errBody}` };
+        const error = `Resend HTTP ${res.status}: ${errBody.slice(0, 200)}`;
+        lastEmailStatus = { provider, sent: false, error, at: new Date().toISOString() };
+        return { sent: false, error };
       }
+      lastEmailStatus = { provider, sent: true, at: new Date().toISOString() };
       return { sent: true };
     }
 
@@ -174,14 +193,17 @@ async function dispatchEmail(params: {
           ]
         : undefined,
     });
+    lastEmailStatus = { provider, sent: true, at: new Date().toISOString() };
     return { sent: true };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     const hint = /ETIMEDOUT|ECONNREFUSED|timeout/i.test(message)
       ? ' (Hint: Render Free Tier blocks outbound SMTP ports 465/587 — set BREVO_API_KEY to send over HTTPS port 443.)'
       : '';
-    console.error(`[email:${provider}] Dispatch failed: ${message}${hint}`);
-    return { sent: false, error: `${message}${hint}` };
+    const fullError = `${message}${hint}`;
+    console.error(`[email:${provider}] Dispatch failed: ${fullError}`);
+    lastEmailStatus = { provider, sent: false, error: fullError, at: new Date().toISOString() };
+    return { sent: false, error: fullError };
   }
 }
 

@@ -11,6 +11,7 @@ import { booksRouter } from './routes/books.js';
 import { dashboardRouter } from './routes/dashboard.js';
 import { gateRouter } from './routes/gate.js';
 import { seatsRouter } from './routes/seats.js';
+import { getLastEmailStatus } from './services/email.js';
 import type { AuthenticatedRequest } from './types/index.js';
 
 export function createApp() {
@@ -63,6 +64,7 @@ export function createApp() {
       supabaseConfigured: isSupabaseConfigured(),
       emailConfigured: isEmailConfigured(),
       emailProvider: getEmailProvider(),
+      lastEmailStatus: getLastEmailStatus(),
       timezone: env.timezone,
       timestamp: new Date().toISOString(),
     });

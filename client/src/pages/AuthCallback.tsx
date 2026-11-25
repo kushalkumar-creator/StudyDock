@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BookLoader } from '../components/BookLoader';
 import { useAuth } from '../hooks/useAuth';
 
 export function AuthCallback() {
@@ -19,10 +20,7 @@ export function AuthCallback() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] text-[var(--text-primary)]">
-      <div className="text-center space-y-4">
-        <div className="mx-auto h-8 w-8 border-2 border-[var(--border-color)] border-t-[var(--text-primary)] animate-spin" />
-        <p className="meta-label">VERIFYING CREDENTIALS…</p>
-      </div>
+      <BookLoader label="VERIFYING CREDENTIALS…" size="md" />
     </div>
   );
 }

@@ -1,16 +1,12 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { BookLoader } from '../components/BookLoader';
 import { useAuth } from '../hooks/useAuth';
 import type { UserRole } from '../types';
 
 function FullScreenSpinner() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] text-[var(--text-primary)]">
-      <div className="flex flex-col items-center gap-4">
-        <div className="h-8 w-8 border-2 border-[var(--border-color)] border-t-[var(--text-primary)] animate-spin" />
-        <p className="text-xs font-bold tracking-[0.2em] uppercase opacity-75">
-          LOADING STUDYDOCK…
-        </p>
-      </div>
+      <BookLoader label="LOADING STUDYDOCK…" size="md" />
     </div>
   );
 }

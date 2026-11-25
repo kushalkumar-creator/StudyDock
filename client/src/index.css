@@ -604,3 +604,146 @@ body {
 .brand-book-logo:hover .brand-book-base {
   transform: scaleX(1) skewY(0deg);
 }
+
+/* ==========================================================================
+   ANIMATED OPENING & CLOSING BOOK LOADER
+   ========================================================================== */
+.book-loader {
+  perspective: 320px;
+}
+
+.book-loader-closed {
+  transform-origin: center center;
+  animation: bookLoaderClosed 1.9s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.book-loader-open {
+  transform-origin: center center;
+  animation: bookLoaderOpen 1.9s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.book-loader-leaf-left {
+  transform-origin: 32px 28px;
+  animation: bookLoaderLeafLeft 1.9s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.book-loader-leaf-right {
+  transform-origin: 32px 28px;
+  animation: bookLoaderLeafRight 1.9s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.book-loader-page-turn {
+  transform-origin: 32px 28px;
+  animation: bookLoaderPageTurn 1.9s ease-in-out infinite;
+}
+
+.book-loader-base {
+  transform-origin: 32px 46px;
+  animation: bookLoaderBase 1.9s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes bookLoaderClosed {
+  0%,
+  12% {
+    opacity: 1;
+    transform: scaleX(1) rotateY(0deg);
+  }
+  24%,
+  76% {
+    opacity: 0;
+    transform: scaleX(0.62) rotateY(-42deg);
+  }
+  88%,
+  100% {
+    opacity: 1;
+    transform: scaleX(1) rotateY(0deg);
+  }
+}
+
+@keyframes bookLoaderOpen {
+  0%,
+  14% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  26%,
+  74% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  86%,
+  100% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes bookLoaderLeafLeft {
+  0%,
+  14% {
+    transform: scaleX(0.15) skewY(10deg);
+  }
+  30%,
+  70% {
+    transform: scaleX(1) skewY(0deg);
+  }
+  86%,
+  100% {
+    transform: scaleX(0.15) skewY(10deg);
+  }
+}
+
+@keyframes bookLoaderLeafRight {
+  0%,
+  14% {
+    transform: scaleX(0.15) skewY(-10deg);
+  }
+  30%,
+  70% {
+    transform: scaleX(1) skewY(0deg);
+  }
+  86%,
+  100% {
+    transform: scaleX(0.15) skewY(-10deg);
+  }
+}
+
+@keyframes bookLoaderPageTurn {
+  0%,
+  32% {
+    opacity: 0;
+    transform: scaleX(0.95);
+  }
+  38% {
+    opacity: 0.9;
+    transform: scaleX(0.92);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scaleX(0.06) skewY(-6deg);
+  }
+  62% {
+    opacity: 0.9;
+    transform: scaleX(-0.92);
+  }
+  68%,
+  100% {
+    opacity: 0;
+    transform: scaleX(-0.95);
+  }
+}
+
+@keyframes bookLoaderBase {
+  0%,
+  14% {
+    transform: scaleX(0.5);
+  }
+  30%,
+  70% {
+    transform: scaleX(1);
+  }
+  86%,
+  100% {
+    transform: scaleX(0.5);
+  }
+}

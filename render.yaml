@@ -16,13 +16,13 @@ services:
       - key: ENABLE_DEMO_RESET
         value: "false"
       - key: CLIENT_URL
-        sync: false
+        value: https://studydock-eta.vercel.app,http://localhost:5173
       - key: SUPABASE_URL
-        sync: false
+        value: https://deunnaibdmlohgtnxdsz.supabase.co
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
       - key: GMAIL_USER
-        sync: false
+        value: kushalkumar78k@gmail.com
       - key: GMAIL_APP_PASSWORD
         sync: false
       - key: ENTRY_CODE_SECRET

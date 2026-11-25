@@ -1,0 +1,18 @@
+{
+  "name": "StudyDock — Library & Reading Room",
+  "short_name": "StudyDock",
+  "description": "Book a seat across 3 architectural floors, enter with a signed QR pass, and borrow books online.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#004643",
+  "theme_color": "#004643",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/book-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

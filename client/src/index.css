@@ -1,0 +1,606 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   DESIGN SYSTEM TOKENS — CYPRUS READING ROOM (DIRECTION A)
+   ========================================================================== */
+:root,
+[data-theme='dark'] {
+  --cyprus: #004643;
+  --cyprus-light: #0b6b65;
+  --cyprus-deep: #00312f;
+  --sand: #f0ede5;
+  --sand-dim: #e4dfd3;
+  --sand-hover: rgba(240, 237, 229, 0.14);
+
+  --bg-primary: var(--cyprus);
+  --bg-elevated: var(--cyprus-deep);
+  --text-primary: var(--sand);
+  --text-muted: rgba(240, 237, 229, 0.72);
+  --card-bg: var(--cyprus-light);
+  --card-hover: #0e7d76;
+  --border-color: rgba(240, 237, 229, 0.22);
+  --border-strong: rgba(240, 237, 229, 0.55);
+  --grid-line: rgba(240, 237, 229, 0.055);
+  --marquee-bg: var(--sand);
+  --marquee-text: var(--cyprus);
+  --btn-bg: transparent;
+  --btn-text: var(--sand);
+  --btn-border: var(--sand);
+  --btn-fill: var(--sand);
+  --btn-fill-text: var(--cyprus);
+  --btn-solid-bg: var(--sand);
+  --btn-solid-text: var(--cyprus);
+  --btn-solid-fill: var(--cyprus-deep);
+  --btn-solid-fill-text: var(--sand);
+  --accent-available: #4ade80;
+  --accent-reserved: #fbbf24;
+  --accent-occupied: #fb7185;
+  --accent-blocked: #94a3b8;
+}
+
+[data-theme='light'] {
+  --bg-primary: var(--sand);
+  --bg-elevated: #eae5da;
+  --text-primary: var(--cyprus);
+  --text-muted: rgba(0, 70, 67, 0.72);
+  --card-bg: #e5e0d5;
+  --card-hover: #dbd4c5;
+  --border-color: rgba(0, 70, 67, 0.22);
+  --border-strong: rgba(0, 70, 67, 0.6);
+  --grid-line: rgba(0, 70, 67, 0.065);
+  --marquee-bg: var(--cyprus);
+  --marquee-text: var(--sand);
+  --btn-bg: transparent;
+  --btn-text: var(--cyprus);
+  --btn-border: var(--cyprus);
+  --btn-fill: var(--cyprus);
+  --btn-fill-text: var(--sand);
+  --btn-solid-bg: var(--cyprus);
+  --btn-solid-text: var(--sand);
+  --btn-solid-fill: var(--cyprus-light);
+  --btn-solid-fill-text: var(--sand);
+  --accent-available: #047857;
+  --accent-reserved: #b45309;
+  --accent-occupied: #be123c;
+  --accent-blocked: #475569;
+}
+
+/* ==========================================================================
+   BASE & SWISS POSTER ARCHITECTURAL GRID (SHARP CORNERS PROJECT-WIDE)
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-radius: 0px !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+  transition:
+    background-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: top center;
+}
+
+/* ==========================================================================
+   TYPOGRAPHY SYSTEM
+   ========================================================================== */
+.font-poster {
+  font-family: 'Anton', Impact, sans-serif;
+  text-transform: uppercase;
+  line-height: 1.04;
+  letter-spacing: 0.015em;
+}
+
+.hero-headline {
+  font-size: clamp(4.2rem, 13.4vw, 13rem);
+  line-height: 0.87;
+  letter-spacing: -0.022em;
+}
+
+@media (max-height: 760px) and (min-width: 768px) {
+  .hero-headline {
+    font-size: clamp(4rem, 11.2vw, 10.2rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-headline {
+    font-size: clamp(3.3rem, 15.8vw, 5.8rem);
+    line-height: 0.89;
+  }
+}
+
+.meta-label {
+  font-family: 'Archivo', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Staggered Load Reveal Mask */
+.line-mask {
+  overflow: hidden;
+  display: block;
+  padding-bottom: 0.04em;
+}
+
+.line-reveal {
+  display: block;
+  transform: translateY(112%);
+  opacity: 0;
+  animation: posterSlideUp 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.line-reveal-delay-1 {
+  animation-delay: 0.08s;
+}
+.line-reveal-delay-2 {
+  animation-delay: 0.22s;
+}
+.line-reveal-delay-3 {
+  animation-delay: 0.36s;
+}
+
+@keyframes posterSlideUp {
+  0% {
+    transform: translateY(112%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   SHARP-CORNERED SLIDING FILL BUTTONS
+   ========================================================================== */
+.btn-slide {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border: 1.5px solid var(--btn-border);
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  overflow: hidden;
+  z-index: 1;
+  cursor: pointer;
+  transition:
+    color 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease;
+}
+
+.btn-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--btn-fill);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: -1;
+}
+
+.btn-slide:not(:disabled):hover::before,
+.btn-slide:not(:disabled):focus-visible::before {
+  transform: scaleX(1);
+}
+
+.btn-slide:not(:disabled):hover,
+.btn-slide:not(:disabled):focus-visible {
+  color: var(--btn-fill-text);
+}
+
+.btn-slide:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.btn-slide-solid {
+  border: 1.5px solid var(--btn-solid-bg);
+  background-color: var(--btn-solid-bg);
+  color: var(--btn-solid-text);
+}
+
+.btn-slide-solid::before {
+  background-color: var(--btn-solid-fill);
+}
+
+.btn-slide-solid:not(:disabled):hover,
+.btn-slide-solid:not(:disabled):focus-visible {
+  color: var(--btn-solid-fill-text);
+  border-color: var(--btn-border);
+}
+
+/* ==========================================================================
+   EDITORIAL CARDS, INPUTS & SURFACE UTILITIES
+   ========================================================================== */
+@layer components {
+  .editorial-card,
+  .card {
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease;
+  }
+
+  .editorial-card-interactive:hover {
+    background-color: var(--card-hover);
+    border-color: var(--border-strong);
+  }
+
+  .editorial-panel {
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+  }
+
+  .editorial-input {
+    width: 100%;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-strong);
+    padding: 0.65rem 0.85rem;
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.875rem;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .editorial-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+
+  .editorial-input:focus {
+    outline: 2px solid var(--text-primary);
+    outline-offset: -1px;
+  }
+
+  .editorial-input option {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+}
+
+.status-pulse {
+  width: 8px;
+  height: 8px;
+  background-color: currentColor;
+  display: inline-block;
+  animation: pulseOpacity 2s infinite ease-in-out;
+}
+
+@keyframes pulseOpacity {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* ==========================================================================
+   3D HARDCOVER BOOK STACK ENGINE (CSS 3D PRESERVE-3D)
+   ========================================================================== */
+.book-stage {
+  perspective: 1700px;
+  perspective-origin: 50% 50%;
+  pointer-events: none;
+}
+
+.book-stack-rig {
+  position: relative;
+  width: 340px;
+  height: 240px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.book-stack-rig:active {
+  cursor: grabbing;
+}
+
+@media (max-width: 768px) {
+  .book-stack-rig {
+    width: 240px;
+    height: 185px;
+  }
+}
+
+.hardcover-book {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--bw, 290px);
+  height: var(--bd, 210px);
+  margin-left: calc(var(--bw, 290px) / -2);
+  margin-top: calc(var(--bd, 210px) / -2);
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: filter 0.3s ease;
+  cursor: pointer;
+}
+
+.hardcover-book:hover {
+  filter: brightness(1.07);
+}
+
+.book-cover-top {
+  position: absolute;
+  inset: 0;
+  transform: translateZ(calc(var(--bh, 34px) / 2));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px 16px;
+  backface-visibility: hidden;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.04) 0px,
+      rgba(0, 0, 0, 0.04) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  box-shadow: inset 8px 0 14px rgba(0, 0, 0, 0.22);
+}
+
+.book-cover-bottom {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg) translateZ(calc(var(--bh, 34px) / 2));
+  box-shadow: 0 24px 44px rgba(0, 18, 17, 0.55);
+}
+
+.book-spine {
+  position: absolute;
+  left: 0;
+  top: calc(50% - (var(--bh, 34px) / 2));
+  width: var(--bw, 290px);
+  height: var(--bh, 34px);
+  transform: rotateX(-90deg) translateZ(calc(var(--bd, 210px) / 2));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0) 24%,
+      rgba(0, 0, 0, 0.22) 100%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  overflow: hidden;
+}
+
+.book-spine::before,
+.book-spine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: rgba(0, 0, 0, 0.24);
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.14);
+}
+.book-spine::before {
+  left: 34px;
+}
+.book-spine::after {
+  right: 34px;
+}
+
+.book-pages-right {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  right: 4px;
+  width: calc(var(--bh, 34px) - 4px);
+  transform-origin: right center;
+  transform: translateZ(calc(var(--bh, 34px) / 2 - 2px)) rotateY(90deg);
+  background: repeating-linear-gradient(
+    90deg,
+    #eae4d7 0px,
+    #eae4d7 1.5px,
+    #cfc7b6 1.5px,
+    #cfc7b6 3px
+  );
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.18);
+}
+
+.book-pages-left {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(var(--bh, 34px) - 4px);
+  transform-origin: left center;
+  transform: translateZ(calc(var(--bh, 34px) / 2 - 2px)) rotateY(-90deg);
+  background: repeating-linear-gradient(
+    90deg,
+    #e6dfd1 0px,
+    #e6dfd1 1.5px,
+    #c8c0af 1.5px,
+    #c8c0af 3px
+  );
+}
+
+.book-pages-back {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: calc(50% - ((var(--bh, 34px) - 4px) / 2));
+  height: calc(var(--bh, 34px) - 4px);
+  transform: rotateX(90deg) translateZ(calc(var(--bd, 210px) / 2 - 3px));
+  background: repeating-linear-gradient(
+    0deg,
+    #eae4d7 0px,
+    #eae4d7 1.5px,
+    #cfc7b6 1.5px,
+    #cfc7b6 3px
+  );
+}
+
+.cloth-sand {
+  background-color: #f0ede5;
+  color: #004643;
+}
+.cloth-sand-warm {
+  background-color: #e2dbd0;
+  color: #004643;
+}
+.cloth-cyprus {
+  background-color: #004643;
+  color: #f0ede5;
+}
+.cloth-cyprus-light {
+  background-color: #0b6b65;
+  color: #f0ede5;
+}
+.cloth-cyprus-deep {
+  background-color: #003330;
+  color: #f0ede5;
+}
+
+/* ==========================================================================
+   INFINITE SEAMLESS MARQUEE STRIP
+   ========================================================================== */
+.marquee-band {
+  background-color: var(--marquee-bg);
+  color: var(--marquee-text);
+  border-top: 1.5px solid var(--border-strong);
+  border-bottom: 1.5px solid var(--border-strong);
+  overflow: hidden;
+  user-select: none;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: infiniteMarquee 32s linear infinite;
+  will-change: transform;
+}
+
+.marquee-band:hover .marquee-track {
+  animation-play-state: running;
+}
+
+@keyframes infiniteMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* ==========================================================================
+   INTERACTIVE BRAND BOOK LOGO (CLOSED AT REST → OPENS ON HOVER)
+   ========================================================================== */
+.brand-book-logo {
+  perspective: 240px;
+}
+
+.brand-book-closed {
+  transform-origin: center center;
+  opacity: 1;
+  transform: scaleX(1) rotateY(0deg);
+  transition:
+    transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.22s ease;
+}
+
+.brand-book-open {
+  opacity: 0;
+  transform: scale(0.92);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.24s ease;
+}
+
+.brand-book-leaf-left {
+  transform-origin: 32px 28px;
+  transform: scaleX(0.18) skewY(8deg);
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.brand-book-leaf-right {
+  transform-origin: 32px 28px;
+  transform: scaleX(0.18) skewY(-8deg);
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.brand-book-base {
+  transform-origin: 32px 46px;
+  transform: scaleX(0.55);
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .brand-book-closed,
+.brand-book-logo:hover .brand-book-closed {
+  opacity: 0;
+  transform: scaleX(0.65) rotateY(-40deg);
+}
+
+.group:hover .brand-book-open,
+.brand-book-logo:hover .brand-book-open {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.group:hover .brand-book-leaf-left,
+.brand-book-logo:hover .brand-book-leaf-left,
+.group:hover .brand-book-leaf-right,
+.brand-book-logo:hover .brand-book-leaf-right,
+.group:hover .brand-book-base,
+.brand-book-logo:hover .brand-book-base {
+  transform: scaleX(1) skewY(0deg);
+}

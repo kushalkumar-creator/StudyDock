@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#004643" />
+  <!-- Left open page with 3 cutout lines -->
+  <path
+    d="M68 104 L242 140 L242 368 L68 332 Z"
+    fill="#F0EDE5"
+  />
+  <path d="M100 170 L212 193" stroke="#004643" stroke-width="18" stroke-linecap="butt" />
+  <path d="M100 220 L212 243" stroke="#004643" stroke-width="18" stroke-linecap="butt" />
+  <path d="M100 270 L212 293" stroke="#004643" stroke-width="18" stroke-linecap="butt" />
+
+  <!-- Right open page with 3 cutout lines -->
+  <path
+    d="M444 104 L270 140 L270 368 L444 332 Z"
+    fill="#F0EDE5"
+  />
+  <path d="M300 193 L412 170" stroke="#004643" stroke-width="18" stroke-linecap="butt" />
+  <path d="M300 243 L412 220" stroke="#004643" stroke-width="18" stroke-linecap="butt" />
+  <path d="M300 293 L412 270" stroke="#004643" stroke-width="18" stroke-linecap="butt" />
+
+  <!-- Bottom spine & cover base strip -->
+  <path
+    d="M68 356 L242 392 Q256 396 270 392 L444 356 L444 384 L270 420 Q256 424 242 420 L68 384 Z"
+    fill="#F0EDE5"
+  />
+</svg>

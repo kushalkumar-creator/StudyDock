@@ -2,7 +2,6 @@ import cron from 'node-cron';
 import { env, isSupabaseConfigured } from '../config/env.js';
 import { broadcastUpdate } from '../lib/realtime.js';
 import { getSupabaseAdmin } from '../lib/supabase.js';
-import { sendBookingReminderEmail } from '../services/email.js';
 
 /**
  * Job 1: Every minute — Auto-release no-show bookings (not checked in within settings.no_show_min)
@@ -51,55 +50,14 @@ export async function runNoShowAndCompletionJob(): Promise<{
 }
 
 /**
- * Job 2: Every 5 minutes — Send reminder emails for bookings starting in the next 30 minutes
- * and expire unclaimed book pickup reservations past pickup_expires_at.
+ * Job 2: Every 5 minutes — Expire unclaimed book pickup reservations past pickup_expires_at.
  */
-export async function runRemindersAndBookExpiryJob(): Promise<{
-  remindersSent: number;
+export async function runBookExpiryJob(): Promise<{
   expiredPickups: number;
 }> {
-  if (!isSupabaseConfigured()) return { remindersSent: 0, expiredPickups: 0 };
+  if (!isSupabaseConfigured()) return { expiredPickups: 0 };
   const supabase = getSupabaseAdmin();
   const now = new Date();
-  const in30MinIso = new Date(now.getTime() + 30 * 60_000).toISOString();
-
-  const { data: upcoming } = await supabase
-    .from('bookings')
-    .select(
-      'id, start_at, student:profiles!bookings_user_id_fkey(full_name, email), seat:seats(label, floor:floors(name))',
-    )
-    .eq('status', 'booked')
-    .is('reminder_sent_at', null)
-    .gte('start_at', now.toISOString())
-    .lte('start_at', in30MinIso)
-    .limit(50);
-
-  let remindersSent = 0;
-  for (const b of upcoming ?? []) {
-    // Mark reminder_sent_at atomically first for idempotency
-    const { data: claimed } = await supabase
-      .from('bookings')
-      .update({ reminder_sent_at: now.toISOString() })
-      .eq('id', b.id)
-      .is('reminder_sent_at', null)
-      .select('id')
-      .maybeSingle();
-
-    if (!claimed) continue;
-
-    const student = b.student as unknown as { full_name?: string; email?: string } | null;
-    const seat = b.seat as unknown as { label?: string; floor?: { name?: string } } | null;
-    if (student?.email) {
-      await sendBookingReminderEmail({
-        to: student.email,
-        studentName: student.full_name || 'Student',
-        seatLabel: seat?.label || 'Seat',
-        floorName: seat?.floor?.name || 'Library',
-        startAt: b.start_at,
-      });
-      remindersSent++;
-    }
-  }
 
   // Auto-cancel unclaimed book pickups past pickup_expires_at
   const { data: expiredIssues } = await supabase
@@ -116,13 +74,9 @@ export async function runRemindersAndBookExpiryJob(): Promise<{
   const expiredPickups = expiredIssues?.length ?? 0;
   if (expiredPickups > 0) {
     broadcastUpdate(['books']);
+    console.info(`[cron:book-expiry] Expired ${expiredPickups} unclaimed book pickups.`);
   }
-  if (remindersSent > 0 || expiredPickups > 0) {
-    console.info(
-      `[cron:reminders] Sent ${remindersSent} reminders, expired ${expiredPickups} unclaimed book pickups.`,
-    );
-  }
-  return { remindersSent, expiredPickups };
+  return { expiredPickups };
 }
 
 /**
@@ -207,9 +161,7 @@ export function startScheduledJobs(): void {
   });
 
   cron.schedule('*/5 * * * *', () => {
-    void runRemindersAndBookExpiryJob().catch((err) =>
-      console.error('[cron:reminders] Error:', err),
-    );
+    void runBookExpiryJob().catch((err) => console.error('[cron:book-expiry] Error:', err));
   });
 
   cron.schedule('*/2 * * * *', () => {

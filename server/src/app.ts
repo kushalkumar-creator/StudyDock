@@ -2,7 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import { env, isEmailConfigured, isSupabaseConfigured } from './config/env.js';
+import { env, getEmailProvider, isEmailConfigured, isSupabaseConfigured } from './config/env.js';
 import { handleSseConnection } from './lib/realtime.js';
 import { verifySupabaseJWT } from './middleware/auth.js';
 import { adminRouter } from './routes/admin.js';
@@ -62,6 +62,7 @@ export function createApp() {
       service: 'library-management-server',
       supabaseConfigured: isSupabaseConfigured(),
       emailConfigured: isEmailConfigured(),
+      emailProvider: getEmailProvider(),
       timezone: env.timezone,
       timestamp: new Date().toISOString(),
     });

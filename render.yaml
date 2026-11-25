@@ -25,5 +25,7 @@ services:
         value: kushalkumar78k@gmail.com
       - key: GMAIL_APP_PASSWORD
         sync: false
+      - key: BREVO_API_KEY
+        sync: false
       - key: ENTRY_CODE_SECRET
         generateValue: true
